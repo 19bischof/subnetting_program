@@ -11,7 +11,7 @@ public class subnetting {
     private String decimal_ip = "no decimal IP";
     private String decimal_mask = "no decimal Subnet Mask";
 
-    public int[] decimal_Byte_To_Binary(int oct) {
+    private int[] decimal_Byte_To_Binary(int oct) {
         System.out.println();
         if (oct < 0 || oct > 255) {
             System.out.println("Error: oct wrong : " + oct);
@@ -36,7 +36,7 @@ public class subnetting {
         return bioct;
     }
 
-    public int binary_Byte_To_Decimal(int[] binary) {
+    private int binary_Byte_To_Decimal(int[] binary) {
         int oct = 0;
         if (binary.length != 8) {
             System.out.println("Error: binary array not 8 bits");
@@ -52,7 +52,7 @@ public class subnetting {
         return oct;
     }
 
-    public boolean is_Valid_Oct(int oct) {
+    private boolean is_Valid_Oct(int oct) {
         if (oct < 256 && oct > -1) {
             return true;
         }
@@ -78,8 +78,6 @@ public class subnetting {
         }
         System.out.println("the mask is : \n");
         convert_Binary_Mask_To_Decimal();
-        print_Decimal_Mask();
-        print_Binary_Mask();
         System.out.println();
         myscan.close();
 
@@ -103,6 +101,7 @@ public class subnetting {
             fourth_oct = myscan.nextInt();
         } while (!is_Valid_Oct(fourth_oct));
         decimal_ip = (first_oct + "." + second_oct + "." + third_oct + "." + fourth_oct);
+        copy_Decimal_IP_to_Binary_IP();
         print_Decimal_IP();
         myscan.close();
     }
@@ -155,4 +154,17 @@ public class subnetting {
         cur_int = binary_Byte_To_Decimal(cur_bin);
         decimal_mask += Integer.toString(cur_int);
     }
+    /*menu:
+    while(i == 0){
+            System.out.println("What do you want to do ?");
+            System.out.println("\tscan_Subnet_Mask_In_Slash()");
+            System.out.println("\tscan_Decimal_IP()");
+            System.out.println("\tprint_Decimal_IP()");
+            System.out.println("\tprint_Binary_IP()");
+            System.out.println("\tprint_Binary_Mask()");
+            System.out.println("\tprint_Decimal_Mask()");
+            
+
+        }
+        */
 }
