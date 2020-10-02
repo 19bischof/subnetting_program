@@ -1,5 +1,9 @@
+import asg.cliche.Command;
+import asg.cliche.ShellFactory;
+
+import java.io.IOException;
 import java.util.Scanner;
-import java.lang.Math;
+
 
 public class subnetting {
     private int first_oct;
@@ -52,14 +56,15 @@ public class subnetting {
         return oct;
     }
 
-    private boolean is_Valid_Oct(int oct) {
+    private boolean is_not_Valid_oct(int oct) {
         if (oct < 256 && oct > -1) {
-            return true;
+            return false;
         }
         System.out.println("The given octett was false : " + oct + "\nPlease try again");
-        return false;
+        return true;
     }
 
+    @Command //one
     public void scan_Subnet_Mask_In_Slash() {
         int mask;
         Scanner myscan = new Scanner(System.in);
@@ -83,33 +88,36 @@ public class subnetting {
 
     }
 
+    @Command //two
     public void scan_Decimal_IP() {
         Scanner myscan = new Scanner(System.in);
         do {
             first_oct = myscan.nextInt();
-        } while (!is_Valid_Oct(first_oct));
+        } while (is_not_Valid_oct(first_oct));
 
         do {
             second_oct = myscan.nextInt();
-        } while (!is_Valid_Oct(second_oct));
+        } while (is_not_Valid_oct(second_oct));
 
         do {
             third_oct = myscan.nextInt();
-        } while (!is_Valid_Oct(third_oct));
+        } while (is_not_Valid_oct(third_oct));
 
         do {
             fourth_oct = myscan.nextInt();
-        } while (!is_Valid_Oct(fourth_oct));
+        } while (is_not_Valid_oct(fourth_oct));
         decimal_ip = (first_oct + "." + second_oct + "." + third_oct + "." + fourth_oct);
         copy_Decimal_IP_to_Binary_IP();
         print_Decimal_IP();
         myscan.close();
     }
 
+    @Command //three
     public void print_Decimal_IP() {
         System.out.println(decimal_ip);
     }
 
+    @Command //four
     public void copy_Decimal_IP_to_Binary_IP() {
         System.arraycopy(decimal_Byte_To_Binary(first_oct), 0, binary_ip, 0, 8);
         System.arraycopy(decimal_Byte_To_Binary(second_oct), 0, binary_ip, 8, 8);
@@ -117,18 +125,21 @@ public class subnetting {
         System.arraycopy(decimal_Byte_To_Binary(fourth_oct), 0, binary_ip, 24, 8);
     }
 
+    @Command //five
     public void print_Binary_IP() {
         for (int i = 0; i < 32; i++) {
             System.out.print(binary_ip[i]);
         }
     }
 
+    @Command //six
     public void print_Binary_Mask() {
         for (int i = 0; i < 32; i++) {
             System.out.print(binary_mask[i]);
         }
     }
 
+    @Command //seven
     public void print_Decimal_Mask() {
         System.out.println(decimal_mask);
     }
@@ -154,17 +165,24 @@ public class subnetting {
         cur_int = binary_Byte_To_Decimal(cur_bin);
         decimal_mask += Integer.toString(cur_int);
     }
-    /*menu:
-    while(i == 0){
-            System.out.println("What do you want to do ?");
-            System.out.println("\tscan_Subnet_Mask_In_Slash()");
-            System.out.println("\tscan_Decimal_IP()");
-            System.out.println("\tprint_Decimal_IP()");
-            System.out.println("\tprint_Binary_IP()");
-            System.out.println("\tprint_Binary_Mask()");
-            System.out.println("\tprint_Decimal_Mask()");
-            
 
-        }
-        */
+    @Command //eight
+    public void show_Menu() {
+
+        System.out.println("What do you want to do ?");
+        System.out.println("\tscan_Subnet_Mask_In_Slash()");
+        System.out.println("\tscan_Decimal_IP()");
+        System.out.println("\tprint_Decimal_IP()");
+        System.out.println("\tprint_Binary_IP()");
+        System.out.println("\tprint_Binary_Mask()");
+        System.out.println("\tprint_Decimal_Mask()");
+
+    }
+
+    public static void main(String[] args) throws IOException {
+        ShellFactory.createConsoleShell("start", "", new subnetting())
+                .commandLoop();
+
+
+    }
 }
