@@ -11,8 +11,8 @@ public class subnetting {
     private int third_oct = -1;
     private int fourth_oct = -1;
     private int slash_mask = -1;
-    private int[] binary_ip = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,};
-    private int[] binary_mask = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,};
+     int[] binary_ip = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    private int[] binary_mask = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     private String decimal_ip = "Error: IP-Address wasn't specified !";
     private String decimal_mask = "Error: Subnet wasn't specified !";
     private String decimal_network_address = "Didn't calculate Ranges yet !";
@@ -108,15 +108,30 @@ public class subnetting {
         } while (is_Not_Valid_Oct(first_oct));
 
         do {
-            second_oct = myscan.nextInt();
+            if (myscan.hasNextInt()) {
+                second_oct = myscan.nextInt();
+            } else {
+                System.out.println("Please only input one Octet at a time !");
+                myscan.nextLine();
+            }
         } while (is_Not_Valid_Oct(second_oct));
 
         do {
-            third_oct = myscan.nextInt();
+            if (myscan.hasNextInt()) {
+                third_oct = myscan.nextInt();
+            } else {
+                System.out.println("Please only input one Octet at a time !");
+                myscan.nextLine();
+            }
         } while (is_Not_Valid_Oct(third_oct));
 
         do {
-            fourth_oct = myscan.nextInt();
+            if (myscan.hasNextInt()) {
+                fourth_oct = myscan.nextInt();
+            } else {
+                System.out.println("Please only input one Octet at a time !");
+                myscan.nextLine();
+            }
         } while (is_Not_Valid_Oct(fourth_oct));
         decimal_ip = (first_oct + "." + second_oct + "." + third_oct + "." + fourth_oct);
         copy_Decimal_IP_to_Binary_IP();
@@ -191,17 +206,17 @@ public class subnetting {
     public void show_Menu() {
 
         System.out.println("What do you want to do ?");
-        System.out.println("1:\tscan_Subnet_Mask_In_Slash()");
-        System.out.println("2:\tscan_Decimal_IP()");
-        System.out.println("3:\tprint_Decimal_IP()");
-        System.out.println("4:\tprint_Binary_IP()");
-        System.out.println("5:\tprint_Binary_Mask()");
-        System.out.println("6:\tprint_Decimal_Mask()");
-        System.out.println("7:\tshow_Menu()");
-        System.out.println("8:\tprint_Number_Of_Possible_Hosts()");
-        System.out.println("9:\tcalculate_Ranges()");
-        System.out.println("10:\tprint_Network_Address()");
-        System.out.println("11:\tprint_Broadcast_Address()");
+        System.out.println(" 1:   scan_Subnet_Mask_In_Slash()");
+        System.out.println(" 2:   scan_Decimal_IP()");
+        System.out.println(" 3:   print_Decimal_IP()");
+        System.out.println(" 4:   print_Binary_IP()");
+        System.out.println(" 5:   print_Binary_Mask()");
+        System.out.println(" 6:   print_Decimal_Mask()");
+        System.out.println(" 7:   show_Menu()");
+        System.out.println(" 8:   print_Number_Of_Possible_Hosts()");
+        System.out.println(" 9:   calculate_Ranges()");
+        System.out.println(" 10:  print_Network_Address()");
+        System.out.println(" 11:  print_Broadcast_Address()");
 
 
     }
@@ -223,7 +238,7 @@ public class subnetting {
 
             return;
         }
-        if (decimal_ip.equals("no decimal IP")) {
+        if (decimal_ip.equals("Error: IP-Address wasn't specified !")) {
             System.out.println("Error: IP-Address wasn't specified !");
 
             return;
@@ -233,6 +248,8 @@ public class subnetting {
         for (int i = slash_mask; i < 32; i++) {
             poly_address[i] = 0;
         }
+        for(int k = 0;k <32 ;k++){
+        System.out.print(poly_address[k]);}
         decimal_network_address = convert_Binary_32_Bit_To_Decimal(poly_address);
         //broadcast address
         poly_address = binary_ip;
