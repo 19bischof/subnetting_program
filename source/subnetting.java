@@ -11,7 +11,7 @@ public class subnetting {
     private int third_oct = -1;
     private int fourth_oct = -1;
     private int slash_mask = -1;
-     int[] binary_ip = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    int[] binary_ip = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     private int[] binary_mask = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     private String decimal_ip = "Error: IP-Address wasn't specified !";
     private String decimal_mask = "Error: Subnet wasn't specified !";
@@ -62,7 +62,6 @@ public class subnetting {
         if (oct < 256 && oct > -1) {
             return false;
         }
-        System.out.println("The given Octet is incorrect : " + oct + "\nPlease try again");
 
         return true;
     }
@@ -94,43 +93,131 @@ public class subnetting {
 
     }
 
+    private boolean is_Full_IP_Address(String input) {
+        String[] octett_ar;
+        int[] octett_array = new int[4];
+        octett_ar = input.split("\\.", 4);
+        if (octett_ar.length != 4) {
+            return false;
+        }
+
+        try {
+            octett_array[0] = Integer.parseInt(octett_ar[0]);
+        } catch (Exception e) {
+            return false;
+        }
+
+        try {
+            octett_array[1] = Integer.parseInt(octett_ar[1]);
+        } catch (Exception e) {
+            return false;
+        }
+
+        try {
+            octett_array[2] = Integer.parseInt(octett_ar[2]);
+        } catch (Exception e) {
+            return false;
+        }
+
+        try {
+            octett_array[3] = Integer.parseInt(octett_ar[3]);
+        } catch (Exception e) {
+            return false;
+        }
+        if (is_Not_Valid_Oct(octett_array[0])) {
+            return false;
+        }
+        if (is_Not_Valid_Oct(octett_array[1])) {
+            return false;
+        }
+        if (is_Not_Valid_Oct(octett_array[2])) {
+            return false;
+        }
+        if (is_Not_Valid_Oct(octett_array[3])) {
+            return false;
+        }
+
+        first_oct = octett_array[0];
+        second_oct = octett_array[1];
+        third_oct = octett_array[2];
+        fourth_oct = octett_array[3];
+
+        decimal_ip = (first_oct + "." + second_oct + "." + third_oct + "." + fourth_oct);
+        copy_Decimal_IP_to_Binary_IP();
+        print_Decimal_IP();
+        return true;
+    }
+
     @Command(name = "scan_Decimal_IP", abbrev = "2") //two
     public void scan_Decimal_IP() {
         Scanner myscan = new Scanner(System.in);
+        String inputString;
         do {
             if (myscan.hasNextInt()) {
                 first_oct = myscan.nextInt();
             } else {
-                System.out.println("Please only input one Octet at a time !");
-                myscan.nextLine();
+                inputString = myscan.next().toLowerCase();
+                //check if full ip address:
+                if (is_Full_IP_Address(inputString)) {
+                    return;
+                }
+
+
+                if (inputString.equals(("cancel")) || inputString.equals("c")) {
+                    first_oct = -1;
+                    return;
+                }
+                System.out.println("Please input only one Octet at a time !");
             }
 
         } while (is_Not_Valid_Oct(first_oct));
 
         do {
+            System.out.print(first_oct + ".");
             if (myscan.hasNextInt()) {
                 second_oct = myscan.nextInt();
             } else {
-                System.out.println("Please only input one Octet at a time !");
-                myscan.nextLine();
+                inputString = myscan.next().toLowerCase();
+                if (inputString.equals(("cancel")) || inputString.equals("c")) {
+                    first_oct = -1;
+                    second_oct = -1;
+                    return;
+                }
+                System.out.println("Please input only one Octet at a time !");
             }
         } while (is_Not_Valid_Oct(second_oct));
 
         do {
+            System.out.print(first_oct + "." + second_oct + ".");
             if (myscan.hasNextInt()) {
                 third_oct = myscan.nextInt();
             } else {
-                System.out.println("Please only input one Octet at a time !");
-                myscan.nextLine();
+                inputString = myscan.next().toLowerCase();
+                if (inputString.equals(("cancel")) || inputString.equals("c")) {
+                    first_oct = -1;
+                    second_oct = -1;
+                    third_oct = -1;
+                    return;
+                }
+                System.out.println("Please input only one Octet at a time !");
             }
         } while (is_Not_Valid_Oct(third_oct));
 
+
         do {
+            System.out.print(first_oct + "." + second_oct + "." + third_oct + ".");
             if (myscan.hasNextInt()) {
                 fourth_oct = myscan.nextInt();
             } else {
-                System.out.println("Please only input one Octet at a time !");
-                myscan.nextLine();
+                inputString = myscan.next().toLowerCase();
+                if (inputString.equals(("cancel")) || inputString.equals("c")) {
+                    first_oct = -1;
+                    second_oct = -1;
+                    third_oct = -1;
+                    fourth_oct = -1;
+                    return;
+                }
+                System.out.println("Please input only one Octet at a time !");
             }
         } while (is_Not_Valid_Oct(fourth_oct));
         decimal_ip = (first_oct + "." + second_oct + "." + third_oct + "." + fourth_oct);
@@ -234,22 +321,25 @@ public class subnetting {
     @Command(name = "calculate_Ranges", abbrev = "9") //nine
     public void calculate_Ranges() {
         if (slash_mask == -1) {
-            System.out.println("Error: Subnet wasn't specified !");
-
+            if (decimal_ip.equals("Error: IP-Address wasn't specified !")) {
+                System.out.println("Error: Subnet and IP-Address weren't specified !");
+            }else {
+                System.out.println("Error: Subnet wasn't specified !");
+            }
             return;
         }
-        if (decimal_ip.equals("Error: IP-Address wasn't specified !")) {
-            System.out.println("Error: IP-Address wasn't specified !");
+            if (decimal_ip.equals("Error: IP-Address wasn't specified !")) {
+                System.out.println("Error: IP-Address wasn't specified !");
 
-            return;
-        }
+                return;
+            }
+
         //network address
         int[] poly_address = binary_ip;
         for (int i = slash_mask; i < 32; i++) {
             poly_address[i] = 0;
         }
-        for(int k = 0;k <32 ;k++){
-        System.out.print(poly_address[k]);}
+
         decimal_network_address = convert_Binary_32_Bit_To_Decimal(poly_address);
         //broadcast address
         poly_address = binary_ip;
